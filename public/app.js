@@ -99,7 +99,19 @@ function reportMarkdown() {
 async function copy(text, button) { await navigator.clipboard?.writeText(text); const initial=button.textContent; button.textContent='Copied'; setTimeout(() => button.textContent=initial,1200); }
 function downloadReport() { const blob=new Blob([reportMarkdown()],{type:'text/markdown'}); const link=document.createElement('a'); link.href=URL.createObjectURL(blob); link.download='specghost-release-report.md'; link.click(); URL.revokeObjectURL(link.href); addEvent('Release report exported', 'Markdown handoff pack downloaded.'); }
 function saveVersion() { const versions=storage(versionsKey); versions.unshift({name:`TaskFlow v${versions.length + 1}`,contract:$('#candidate').value,created:timeNow()}); saveStorage(versionsKey,versions.slice(0,10)); renderVersions(); addEvent('Version saved', `${versions[0].name} added to the local library.`); }
-function loadSnapshot() { const version=storage(versionsKey)[0]; if (version) { $('#candidate').value=version.contract; addEvent('Version loaded', `${version.name} loaded as the proposed contract.`); } else addEvent('No saved version yet', 'Save the current proposed contract to create one.', 'amber'); }
+function saveSnapshot() {
+  const snapshots = storage(versionsKey);
+  const snapshot = { name:`Workspace snapshot ${snapshots.length + 1}`, contract:$('#spec').value, baseline:$('#baseline').value, candidate:$('#candidate').value, created:timeNow() };
+  snapshots.unshift(snapshot);
+  saveStorage(versionsKey, snapshots.slice(0,10));
+  renderVersions();
+  addEvent('Workspace snapshot saved', `${snapshot.name} is available in the local version library.`);
+  const button = $('#save-snapshot');
+  const initial = button.textContent;
+  button.textContent = 'Snapshot saved';
+  setTimeout(() => button.textContent = initial, 1500);
+}
+function loadSnapshot() { const version=storage(versionsKey)[0]; if (version) { $('#candidate').value=version.candidate || version.contract; if (version.baseline) $('#baseline').value=version.baseline; if (version.contract && !version.candidate) $('#spec').value=version.contract; addEvent('Version loaded', `${version.name} loaded into the workspace.`); } else addEvent('No saved version yet', 'Save the current proposed contract to create one.', 'amber'); }
 function renderReview(review) {
   latestReview = review;
   const state = review.severity.toLowerCase();
@@ -119,7 +131,7 @@ async function reviewPR() {
 $('#analyze').onclick=analyze; $('#forge').onclick=forge; $('#compare').onclick=compare; $('#run-checks').onclick=runChecks;
 $('#review-pr').onclick=reviewPR;
 $('#regression').onchange=event=>regression(event.target.checked); $('#copy-fix').onclick=()=>copy($('#fix').textContent,$('#copy-fix')); $('#copy-code').onclick=()=>latestCode&&copy(latestCode,$('#copy-code'));
-$('#save-snapshot').onclick=()=>addEvent('Snapshot saved','TaskFlow contract snapshot saved to this browser.'); $('#save-version').onclick=saveVersion; $('#load-snapshot').onclick=loadSnapshot; $('#use-current').onclick=()=>{ $('#baseline').value=$('#spec').value; addEvent('Baseline updated','Current working contract loaded into the baseline.'); };
+$('#save-snapshot').onclick=saveSnapshot; $('#save-version').onclick=saveVersion; $('#load-snapshot').onclick=loadSnapshot; $('#use-current').onclick=()=>{ $('#baseline').value=$('#spec').value; addEvent('Baseline updated','Current working contract loaded into the baseline.'); };
 $('#copy-report').onclick=()=>copy(reportMarkdown(),$('#copy-report')); $('#download-report').onclick=downloadReport;
 $('#copy-comment').onclick=()=>copy(latestReview ? latestReview.comment : 'Run SpecGhost PR Review Copilot to generate a merge-gate comment.', $('#copy-comment'));
 $('#copy-yaml').onclick=()=>copy($('#ci-yaml').textContent,$('#copy-yaml'));
