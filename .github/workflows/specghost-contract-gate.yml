@@ -1,0 +1,16 @@
+name: SpecGhost Contract Gate
+
+on:
+  pull_request:
+    paths:
+      - "openapi/**"
+      - "contracts/**"
+      - "src/schemas/**"
+
+jobs:
+  behavioral-contract-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Block behavioral contract regressions
+        run: node scripts/specghost-check.js --baseline contracts/baseline.txt --candidate contracts/proposed.txt

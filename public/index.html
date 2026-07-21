@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SpecGhost — Behavioral Contract Guard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+<a class="brand">
+<span class="mark">S</span> SpecGhost</a>
+<div class="header-right">
+<span class="pulse">
+</span> Contract watch active <button class="quiet" id="reset">Reset demo</button>
+</div>
+</header>
+<main>
+<section class="hero">
+<div>
+<div class="eyebrow">BEHAVIORAL CONTRACT GUARD</div>
+<h1>Catch the breaks<br>your tests <em>cannot see.</em>
+</h1>
+<p>SpecGhost turns API intent into behavioral promises—then makes invisible regressions impossible to ship.</p>
+</div>
+<div class="score">
+<span>RELEASE CONFIDENCE</span>
+<strong id="confidence">92</strong>
+<b>/100</b>
+<div class="meter">
+<i id="meter">
+</i>
+</div>
+<small id="score-label">3 promises protected</small>
+</div>
+</section>
+<section class="steps">
+<div class="step active">
+<b>01</b> Understand the promise</div>
+<div class="line">
+</div>
+<div class="step">
+<b>02</b> Simulate the change</div>
+<div class="line">
+</div>
+<div class="step">
+<b>03</b> Protect the user</div>
+</section>
+<section class="grid">
+<article class="panel contract">
+<div class="panel-head">
+<div>
+<span class="kicker">INPUT</span>
+<h2>TaskFlow API contract</h2>
+</div>
+<span class="badge">OpenAPI 3.1</span>
+</div>
+<label for="spec">API Specification</label>
+<textarea id="spec" spellcheck="false" title="API Specification" placeholder="Enter API specification">PATCH /v1/tasks/:id
+
+Updates one task. All fields are optional.
+
+Request body
+{
+  "title": "Ship onboarding",       // optional string
+  "description": "...",             // optional string
+  "dueDate": "2026-07-22T09:00:00Z" // optional ISO-8601 date
+}
+
+Returns 200 with the updated task. Unspecified fields are preserved.</textarea>
+<div class="panel-actions">
+<button class="primary" id="analyze">
+<span>✦</span> Analyze intent</button>
+<span class="hint" id="model-status">Demo intelligence ready</span>
+</div>
+</article>
+<article class="panel promises">
+<div class="panel-head">
+<div>
+<span class="kicker">SPEC GHOSTS</span>
+<h2>Promises your API makes</h2>
+</div>
+<span class="count" id="promise-count">03</span>
+</div>
+<p class="summary" id="summary">Three promises sit underneath this endpoint. Conventional tests miss the one that matters most.</p>
+<div id="promise-list">
+</div>
+</article>
+</section>
+<section class="simulator">
+<div class="sim-head">
+<div>
+<span class="kicker">REGRESSION SIMULATOR</span>
+<h2>What happens when a “safe” change ships?</h2>
+</div>
+<label class="switch">
+<input id="regression" type="checkbox">
+<i>
+</i>
+<span>Introduce regression</span>
+</label>
+</div>
+<div class="diff">
+<div>
+<div class="file">task.schema.ts <span>before</span>
+</div>
+<pre>dueDate: z.string().datetime()<br>  <mark class="green">.optional()</mark>,</pre>
+</div>
+<div class="arrow">→</div>
+<div>
+<div class="file">task.schema.ts <span>after</span>
+</div>
+<pre>dueDate: z.string().datetime()<br>  <mark id="change" class="green">.optional()</mark>,</pre>
+</div>
+</div>
+<div class="result safe" id="result">
+<div class="result-icon">✓</div>
+<div>
+<strong id="result-title">Contract intact</strong>
+<p id="result-copy">All behavioral promises hold. Ship with confidence.</p>
+</div>
+<span class="status-pill" id="status-pill">3 / 3 passing</span>
+</div>
+</section>
+<section class="workbench">
+<div class="workbench-head">
+<div>
+<span class="kicker">CONTRACT WORKSPACE</span>
+<h2>Turn insight into protection.</h2>
+<p>Generate the test, map the blast radius, and keep a traceable contract history.</p>
+</div>
+<div class="work-actions">
+<button class="ghost" id="save-snapshot">Save snapshot</button>
+<button class="primary" id="forge">
+<span>✦</span> Forge test suite</button>
+</div>
+</div>
+<div class="workspace-grid">
+<article class="forge-card">
+<div class="card-title">
+<div>
+<span class="mini-label">TEST FORGE</span>
+<h3 id="suite-name">Behavioral suite waiting</h3>
+</div>
+<span id="forge-source" class="badge">READY</span>
+</div>
+<div id="test-list" class="test-list">
+<div class="empty-state">Select <b>Forge test suite</b> to turn the promises above into runnable tests.</div>
+</div>
+<div class="code-wrap">
+<div class="code-label">
+<span id="code-file">task-contract.spec.ts</span>
+<button id="copy-code">Copy</button>
+</div>
+<pre id="test-code">// Your generated contract test will appear here.</pre>
+</div>
+</article>
+<article class="map-card">
+<div class="card-title">
+<div>
+<span class="mini-label">CHANGE IMPACT MAP</span>
+<h3>One field. Four futures.</h3>
+</div>
+<span class="live-dot">LIVE</span>
+</div>
+<div class="node-map">
+<div class="node api">Task API<small>dueDate</small>
+</div>
+<i class="branch b1">
+</i>
+<i class="branch b2">
+</i>
+<i class="branch b3">
+</i>
+<i class="branch b4">
+</i>
+<div class="node consumer c1">Quick-add<small>mobile</small>
+</div>
+<div class="node consumer c2">CSV import<small>ops</small>
+</div>
+<div class="node consumer c3">Calendar sync<small>integration</small>
+</div>
+<div class="node consumer c4">Edit drawer<small>web</small>
+</div>
+</div>
+<div class="map-legend">
+<span>
+<i>
+</i> protected promise</span>
+<span>
+<i class="warn">
+</i> impacted by regression</span>
+</div>
+</article>
+</div>
+<div class="activity">
+<div class="activity-title">
+<span class="mini-label">CONTRACT TIMELINE</span>
+<button id="clear-history">Clear history</button>
+</div>
+<div id="activity-feed">
+<div class="event">
+<i class="event-dot">
+</i>
+<div>
+<strong>TaskFlow contract loaded</strong>
+<p>Baseline promises are ready to inspect.</p>
+</div>
+<time>now</time>
+</div>
+</div>
+</div>
+</section>
+<section class="release-lab">
+<div class="lab-heading">
+<div>
+<span class="kicker">RELEASE INTELLIGENCE</span>
+<h2>See the change before<br>your users do.</h2>
+</div>
+<div class="risk-orb neutral" id="risk-orb">
+<span id="risk-number">—</span>
+<small>risk score</small>
+</div>
+</div>
+<div class="diff-lab">
+<article class="version-input">
+<div class="version-label">
+<span>BASELINE</span>
+<button id="use-current">Use current</button>
+</div>
+<label for="baseline" class="visually-hidden">Baseline contract</label>
+<textarea id="baseline" spellcheck="false" placeholder="Enter baseline contract">PATCH /v1/tasks/:id
+
+All fields are optional.
+dueDate: optional ISO-8601 date
+Unspecified fields are preserved.</textarea>
+</article>
+<div class="diff-center">
+<span>v1 → v2</span>
+<button class="primary" id="compare">
+<span>✦</span> Compare contracts</button>
+</div>
+<article class="version-input candidate">
+<div class="version-label">
+<span>PROPOSED</span>
+<button id="load-snapshot">Load snapshot</button>
+</div>
+<label for="candidate" class="visually-hidden">Proposed contract</label>
+<textarea id="candidate" spellcheck="false" placeholder="Enter proposed contract">PATCH /v1/tasks/:id
+
+All fields are optional.
+dueDate: required ISO-8601 date
+Unspecified fields are preserved.</textarea>
+</article>
+</div>
+<div class="diff-output">
+<div class="verdict neutral" id="verdict">
+<span>WAITING FOR DIFF</span>
+<strong>Compare a proposed release</strong>
+<p>SpecGhost will identify behavioral breaks hidden inside a contract change.</p>
+</div>
+<div class="change-list" id="change-list">
+<div class="change-empty">No release changes analyzed yet.</div>
+</div>
+</div>
+</section>
+<section class="pr-lab">
+<div class="pr-heading">
+<div>
+<span class="kicker">PR REVIEW COPILOT</span>
+<h2>Review the promise,<br>not just the patch.</h2>
+<p>Paste a pull-request diff. SpecGhost connects changed lines to the user journey they can break.</p>
+</div>
+<button class="primary" id="review-pr">
+<span>✦</span> Review pull request</button>
+</div>
+<div class="pr-grid">
+<article class="diff-input">
+<div class="version-label">
+<label for="pr-diff">GIT DIFF</label>
+<button id="load-demo-diff">Load demo diff</button>
+</div>
+<textarea id="pr-diff" spellcheck="false">diff --git a/src/schemas/task.schema.ts b/src/schemas/task.schema.ts&#10;index 9c13a0..e82d1c 100644&#10;--- a/src/schemas/task.schema.ts&#10;+++ b/src/schemas/task.schema.ts&#10;@@ -39,4 +39,4 @@ export const updateTask = z.object({&#10;- dueDate: z.string().datetime().optional(),&#10;+ dueDate: z.string().datetime(),&#10; });</textarea>
+</article>
+<article class="review-output">
+<div class="review-state neutral" id="review-state">
+<span>WAITING FOR REVIEW</span>
+<strong>Diff evidence will appear here</strong>
+<p>Review a code diff to trace a changed line to its behavioral contract.</p>
+</div>
+<div id="evidence-list" class="evidence-list">
+<div class="change-empty">No source evidence yet.</div>
+</div>
+</article>
+</div>
+<div class="replay-grid">
+<article class="persona-card">
+<div class="card-title">
+<div>
+<span class="mini-label">USER JOURNEY REPLAY</span>
+<h3>Who feels the break?</h3>
+</div>
+<span id="persona-count" class="badge">—</span>
+</div>
+<div id="persona-list" class="persona-list">
+<div class="run-empty">Run a PR review to replay impacted user journeys.</div>
+</div>
+</article>
+<article class="gate-card">
+<div class="card-title">
+<div>
+<span class="mini-label">CI MERGE GATE</span>
+<h3>Put the decision in the pipeline.</h3>
+</div>
+<span class="badge">YAML</span>
+</div>
+<p>Copy this job into GitHub Actions to make behavioral contract checks visible before merge.</p>
+<pre id="ci-yaml">- name: SpecGhost contract gate&#10;  run: node scripts/specghost-check.js --baseline contracts/baseline.txt --candidate contracts/proposed.txt</pre>
+<div class="pack-actions">
+<button class="ghost" id="copy-comment">Copy PR comment</button>
+<button class="primary" id="copy-yaml">Copy CI job</button>
+</div>
+</article>
+</div>
+</section>
+<section class="control-grid">
+<article class="runner-card">
+<div class="card-title">
+<div>
+<span class="mini-label">CONTRACT CHECK RUNNER</span>
+<h3>Prove it against a target.</h3>
+</div>
+<span class="badge">HTTP</span>
+</div>
+<p>Run the behavioral suite in the sandbox, or point it at an HTTP staging URL for a reachability probe.</p>
+<div class="target-row">
+<input id="target-url" type="url" placeholder="https://staging.example.com/health">
+<button class="primary" id="run-checks">Run checks</button>
+</div>
+<div class="run-results" id="run-results">
+<div class="run-empty">No run yet. The built-in TaskFlow sandbox is ready.</div>
+</div>
+</article>
+<article class="pack-card">
+<div class="card-title">
+<div>
+<span class="mini-label">REMEDIATION PACK</span>
+<h3>Hand the fix to the team.</h3>
+</div>
+<span class="badge">READY</span>
+</div>
+<p id="pack-copy">A release report includes the behavioral change, consumer impact, suggested patch, and test coverage.</p>
+<div class="pack-actions">
+<button class="ghost" id="copy-report">Copy Markdown</button>
+<button class="primary" id="download-report">Download report</button>
+</div>
+<div class="version-library">
+<div>
+<span class="mini-label">VERSION LIBRARY</span>
+<strong id="version-count">0 saved</strong>
+</div>
+<button id="save-version">Save current version</button>
+</div>
+</article>
+</section>
+<section class="impact">
+<div>
+<span class="kicker">WHY IT MATTERS</span>
+<h2>200 OK can still be<br>a broken experience.</h2>
+</div>
+<div class="impact-card">
+<span class="mini-label">AFFECTED WHEN BROKEN</span>
+<div class="people">
+<span>Q</span>
+<span>M</span>
+<span>+2</span>
+</div>
+<strong id="affected">0 downstream consumers</strong>
+<p id="impact-copy">SpecGhost connects a technical change to the humans and workflows it interrupts.</p>
+</div>
+<div class="fix-card">
+<span class="mini-label">SUGGESTED FIX</span>
+<code id="fix">No action required.</code>
+<button id="copy-fix">Copy patch</button>
+</div>
+</section>
+</main>
+<footer>
+<span>SPEC<span>GHOST</span> / BUILT FOR THE PROMISES BETWEEN THE LINES</span>
+<span>GPT-5.6 + Codex</span>
+</footer>
+<script src="app.js">
+</script>
+</body>
+</html>

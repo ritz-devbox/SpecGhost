@@ -1,0 +1,8 @@
+{
+  "name": "specghost",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Behavioral contract guard for APIs",
+  "scripts": { "start": "node server.js", "dev": "node server.js", "check": "node scripts/specghost-check.js", "demo:check": "node scripts/specghost-check.js --baseline examples/taskflow.baseline.txt --candidate examples/taskflow.breaking.txt" },
+  "engines": { "node": ">=18" }
+}

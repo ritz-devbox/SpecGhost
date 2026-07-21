@@ -1,0 +1,5 @@
+PATCH /v1/tasks/:id
+
+All fields are optional.
+dueDate: required ISO-8601 date
+Unspecified fields are preserved.
